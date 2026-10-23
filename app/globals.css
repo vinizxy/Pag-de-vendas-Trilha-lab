@@ -30,12 +30,12 @@
 :root {
   color-scheme: dark;
   /* Largura da faixa onde corre a trilha */
-  --trilho: 2.25rem;
+  --trilho: 2rem;
   /* Respiro vertical das seções e meio da 1ª linha do título (alinha o ponto da trilha) */
   --pad-secao: 4.5rem;
   --meio-titulo: 1.1rem;
-  /* Altura reservada para o botão fixo do celular (definida pelo BottomDock) */
-  --dock: 0px;
+  /* Respiro no fim da página = altura do botão fixo do celular (56px + 2×12px + borda) */
+  --dock: calc(5.0625rem + env(safe-area-inset-bottom));
   accent-color: var(--color-trilha);
   scrollbar-color: var(--color-linha) var(--color-grafite);
 }
@@ -43,7 +43,8 @@
 @media (min-width: 64rem) {
   :root {
     --trilho: 7rem;
-    --pad-secao: 7.5rem;
+    --pad-secao: 6rem;
+    --dock: 0px; /* sem botão fixo no computador */
     --meio-titulo: 1.6rem;
   }
 }
@@ -91,6 +92,14 @@ p {
     linear-gradient(to bottom, rgb(242 244 241 / 0.05) 1px, transparent 1px);
   background-size: 2rem 2rem;
   mask-image: radial-gradient(ellipse 90% 75% at 20% 15%, #000 25%, transparent 80%);
+}
+
+/* Variante mais fechada, para espaços reservados (demos sem imagem) */
+.grade-fina {
+  background-image:
+    linear-gradient(to right, rgb(242 244 241 / 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(242 244 241 / 0.04) 1px, transparent 1px);
+  background-size: 1rem 1rem;
 }
 
 /* ---------- Trilha ---------- */

@@ -40,7 +40,7 @@ export function BotaoWhatsApp({ href, origem, nivel, variante = "principal", id,
       href={href}
       onClick={aoClicar}
       rel="noopener"
-      className={`inline-flex min-h-14 items-center justify-center gap-2.5 rounded-xl px-6 text-[1.0625rem] leading-tight ${estilos[variante]} ${className}`}
+      className={`inline-flex min-h-14 items-center justify-center gap-2 rounded-xl px-4 text-base leading-tight sm:gap-2.5 sm:px-6 sm:text-[1.0625rem] ${estilos[variante]} ${className}`}
     >
       <IconeConversa className="size-5 flex-none" />
       <span>{children}</span>

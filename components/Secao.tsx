@@ -18,7 +18,7 @@ export function Secao({ id, titulo, subtitulo, curva, className = "", children }
   const idTitulo = id ? `${id}-titulo` : undefined;
   return (
     <section id={id} aria-labelledby={idTitulo} className={`relative px-4 sm:px-6 lg:px-10 ${className}`}>
-      <div className="mx-auto grid max-w-[80rem] grid-cols-[var(--trilho)_minmax(0,1fr)] gap-x-3 lg:gap-x-6">
+      <div className="mx-auto grid max-w-[80rem] grid-cols-[var(--trilho)_minmax(0,1fr)] gap-x-2.5 lg:gap-x-6">
         <Trilha curva={curva} />
         <div className="min-w-0 py-[var(--pad-secao)]">
           {titulo && (

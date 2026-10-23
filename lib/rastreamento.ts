@@ -43,13 +43,29 @@ function gravar(storage: () => Storage, chave: string, valor: string) {
   }
 }
 
+// Cópia em memória: vale para esta visita mesmo se o navegador bloquear o armazenamento.
+let consentimentoNaMemoria: Consentimento | null = null;
+const EVENTO_CONSENTIMENTO = "tl-consentimento";
+
 export function lerConsentimento(): Consentimento | null {
-  const valor = ler(() => localStorage, CHAVE_CONSENTIMENTO);
+  const valor = ler(() => localStorage, CHAVE_CONSENTIMENTO) ?? consentimentoNaMemoria;
   return valor === "aceito" || valor === "recusado" ? valor : null;
 }
 
 export function salvarConsentimento(valor: Consentimento) {
+  consentimentoNaMemoria = valor;
   gravar(() => localStorage, CHAVE_CONSENTIMENTO, valor);
+  window.dispatchEvent(new Event(EVENTO_CONSENTIMENTO));
+}
+
+/** Para useSyncExternalStore: avisa quando o consentimento muda. */
+export function assinarConsentimento(aoMudar: () => void) {
+  window.addEventListener(EVENTO_CONSENTIMENTO, aoMudar);
+  window.addEventListener("storage", aoMudar);
+  return () => {
+    window.removeEventListener(EVENTO_CONSENTIMENTO, aoMudar);
+    window.removeEventListener("storage", aoMudar);
+  };
 }
 
 /** Guarda UTMs e fbclid da entrada. Mantém a primeira origem da visita. */

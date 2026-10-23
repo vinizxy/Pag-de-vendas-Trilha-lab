@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { BotaoWhatsApp } from "@/components/BotaoWhatsApp";
 import { IconeVistos } from "@/components/Icones";
 import { Logo } from "@/components/Logo";
@@ -11,12 +12,15 @@ function ComColchetes({ texto }: { texto: string }) {
   return (
     <span className="text-trilha">
       {palavras.map((palavra, i) => (
-        <span key={i} className="whitespace-nowrap">
-          {i === 0 && colchete("[")}
-          {palavra}
-          {i === palavras.length - 1 && colchete("]")}
+        // O espaço fica fora do nowrap para a linha poder quebrar entre as palavras
+        <Fragment key={i}>
+          <span className="whitespace-nowrap">
+            {i === 0 && colchete("[")}
+            {palavra}
+            {i === palavras.length - 1 && colchete("]")}
+          </span>
           {i < palavras.length - 1 && " "}
-        </span>
+        </Fragment>
       ))}
     </span>
   );
@@ -73,10 +77,10 @@ export function Hero() {
   return (
     <header className="relative px-4 sm:px-6 lg:px-10">
       <div aria-hidden className="grade pointer-events-none absolute inset-0" />
-      <div className="relative mx-auto grid max-w-[80rem] grid-cols-[var(--trilho)_minmax(0,1fr)] gap-x-3 lg:gap-x-6">
+      <div className="relative mx-auto grid max-w-[80rem] grid-cols-[var(--trilho)_minmax(0,1fr)] gap-x-2.5 lg:gap-x-6">
         {/* Logo: o "S" verde fica sobre o centro da coluna da trilha, que nasce dele */}
         <div className="col-span-2 pt-5 lg:pt-8">
-          <a href="#topo" aria-label="Trilha Lab, início" className="ml-[calc(var(--trilho)/2_-_1rem)] inline-block lg:ml-[calc(var(--trilho)/2_-_1.36rem)]">
+          <a href="#topo" aria-label="Trilha Lab, início" className="ml-[calc(var(--trilho)/2_-_1rem)] inline-flex min-h-11 items-center lg:ml-[calc(var(--trilho)/2_-_1.36rem)]">
             <Logo prioridade className="w-[6.25rem] lg:w-[8.5rem]" />
           </a>
         </div>

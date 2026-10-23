@@ -71,7 +71,8 @@ export function Trilha({ curva = "a", semNo = false, className = "" }: Props) {
 /** Último trecho: desce e faz a curva para dentro do botão final. */
 export function TrilhaFinal() {
   return (
-    <div aria-hidden className="pointer-events-none flex flex-col items-center pb-7">
+    // pb = meia altura do botão (28px) + linha "Orçamento sem compromisso" abaixo dele (32px)
+    <div aria-hidden className="pointer-events-none flex flex-col items-center pb-15">
       <Reta className="h-[calc(var(--pad-secao)_+_var(--meio-titulo)_-_0.375rem)] flex-none" />
       <No />
       <Reta className="flex-1" />
