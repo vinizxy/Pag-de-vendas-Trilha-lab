@@ -1,0 +1,214 @@
+@import "tailwindcss";
+
+/*
+ * Tokens de design da Trilha Lab — único lugar com cores, fontes e medidas.
+ * As classes do Tailwind (bg-grafite, text-trilha, font-mono...) saem daqui.
+ */
+@theme {
+  /* Cores da marca */
+  --color-grafite: #1e2321; /* fundo */
+  --color-grafite-fundo: #181c1b; /* faixas mais profundas */
+  --color-grafite-claro: #262c29; /* superfícies elevadas */
+  --color-linha: #333a37; /* divisórias finas */
+  --color-papel: #f2f4f1; /* texto principal */
+  --color-cinza: #b2b2b2; /* texto secundário (8:1 sobre o grafite) */
+  --color-cinza-escuro: #818280; /* só detalhes grandes ou decorativos */
+  --color-trilha: #7da168; /* verde da marca */
+  --color-brilho: #9fe870; /* verde saturado: só o botão principal e o brilho da trilha */
+  --color-tinta: #0f1412; /* texto sobre o verde saturado */
+
+  /* Curvas de movimento */
+  --ease-saida: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Fontes: variáveis criadas pelo next/font em app/layout.tsx */
+@theme inline {
+  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+}
+
+:root {
+  color-scheme: dark;
+  /* Largura da faixa onde corre a trilha */
+  --trilho: 2.25rem;
+  /* Respiro vertical das seções e meio da 1ª linha do título (alinha o ponto da trilha) */
+  --pad-secao: 4.5rem;
+  --meio-titulo: 1.1rem;
+  /* Altura reservada para o botão fixo do celular (definida pelo BottomDock) */
+  --dock: 0px;
+  accent-color: var(--color-trilha);
+  scrollbar-color: var(--color-linha) var(--color-grafite);
+}
+
+@media (min-width: 64rem) {
+  :root {
+    --trilho: 7rem;
+    --pad-secao: 7.5rem;
+    --meio-titulo: 1.6rem;
+  }
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-grafite);
+  color: var(--color-papel);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: clip;
+  padding-bottom: var(--dock);
+}
+
+::selection {
+  background: var(--color-trilha);
+  color: var(--color-tinta);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brilho);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* Grade sutil do fundo, igual aos Reels. Some nas bordas para não pesar. */
+.grade {
+  background-image:
+    linear-gradient(to right, rgb(242 244 241 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(242 244 241 / 0.05) 1px, transparent 1px);
+  background-size: 2rem 2rem;
+  mask-image: radial-gradient(ellipse 90% 75% at 20% 15%, #000 25%, transparent 80%);
+}
+
+/* ---------- Trilha ---------- */
+
+/* Traço aceso: aparece de cima para baixo conforme a seção entra na tela.
+   Sem suporte a animação por scroll (ou com movimento reduzido) ele já
+   aparece inteiro. */
+.trilha-acesa {
+  filter: drop-shadow(0 0 5px rgb(159 232 112 / 0.5));
+}
+
+/* Trecho do topo: a trilha sai da logo assim que a página abre (o único
+   movimento por tempo; o resto acompanha o scroll). */
+@media (prefers-reduced-motion: no-preference) {
+  .trilha-entrada {
+    animation: desenhar-trilha 1.6s var(--ease-saida) 0.2s both;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .trilha-acesa {
+      animation: desenhar-trilha linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 50%;
+    }
+
+    .no-trilha {
+      animation: acender-no linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 30%;
+    }
+  }
+}
+
+@keyframes desenhar-trilha {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes acender-no {
+  from {
+    opacity: 0.3;
+    scale: 0.55;
+    box-shadow: 0 0 0 0 rgb(159 232 112 / 0);
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+    box-shadow: 0 0 14px 2px rgb(159 232 112 / 0.45);
+  }
+}
+
+/* ---------- Botão principal ---------- */
+
+.botao-principal {
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.35) inset,
+    0 10px 30px -10px rgb(159 232 112 / 0.55);
+  transition:
+    transform 0.2s var(--ease-saida),
+    box-shadow 0.2s var(--ease-saida),
+    background-color 0.2s;
+}
+.botao-principal:hover {
+  background-color: #b2f08a;
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.35) inset,
+    0 14px 36px -10px rgb(159 232 112 / 0.7);
+}
+.botao-principal:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+/* ---------- FAQ (details nativo, funciona sem JavaScript) ---------- */
+
+.faq-item summary {
+  list-style: none;
+}
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+.faq-sinal {
+  transition: rotate 0.3s var(--ease-saida);
+}
+.faq-item[open] .faq-sinal {
+  rotate: 45deg;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    interpolate-size: allow-keywords;
+  }
+  .faq-item::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition:
+      block-size 0.35s var(--ease-saida),
+      content-visibility 0.35s allow-discrete;
+  }
+  .faq-item[open]::details-content {
+    block-size: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
